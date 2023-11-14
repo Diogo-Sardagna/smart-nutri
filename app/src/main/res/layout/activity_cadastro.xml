@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="View.CadastroActivity">
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp">
+
+        <RadioButton
+            android:id="@+id/radioPaciente"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Paciente" />
+
+        <RadioButton
+            android:id="@+id/radioNutricionista"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nutricionista" />
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/etNome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/radioGroup"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="21dp"
+        android:hint="Nome" />
+
+    <EditText
+            android:id="@+id/etCpf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="CPF"
+            android:layout_below="@id/etNome"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="5dp"/>
+
+        <EditText
+            android:id="@+id/etDataNascimento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Data de Nascimento"
+            android:layout_below="@id/etCpf"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="5dp"/>
+
+        <EditText
+            android:id="@+id/etSexo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Sexo"
+            android:layout_below="@id/etDataNascimento"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="5dp"/>
+
+        <EditText
+            android:id="@+id/etPeso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Peso"
+            android:layout_below="@id/etSexo"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="5dp"/>
+
+        <EditText
+            android:id="@+id/etAltura"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Altura"
+            android:layout_below="@id/etPeso"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="5dp"/>
+
+        <EditText
+            android:id="@+id/etCrm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="CRM"
+            android:layout_below="@id/etAltura"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="5dp"/>
+
+        <EditText
+            android:id="@+id/etTelefone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Telefone"
+            android:layout_below="@id/etCrm"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="5dp"/>
+
+        <EditText
+            android:id="@+id/etInformacoesAdicionais"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etTelefone"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="5dp"
+            android:hint="Informações Adicionais" />
+
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etInformacoesAdicionais"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="5dp"
+            android:hint="Email" />
+
+        <EditText
+            android:id="@+id/etSenha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etEmail"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="5dp"
+            android:hint="Senha" />
+
+        <EditText
+            android:id="@+id/etConfirmarSenha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Confirmar Senha"
+            android:layout_below="@id/etSenha"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="5dp"/>
+
+        <Button
+            android:id="@+id/btnCadastrar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cadastrar"
+            android:layout_below="@id/etConfirmarSenha"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="5dp"/>
+    </RelativeLayout>
+
+
