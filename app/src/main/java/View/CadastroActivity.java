@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.List;
@@ -15,11 +17,16 @@ import java.util.regex.Pattern;
 
 import Controller.PessoaController;
 import Model.Pessoa;
+import Model.Paciente;
+import Model.Nutricionista;
 import Repository.PessoaRepository;
+import Repository.PacienteRepository;
+import Repository.NutricionistaRepository;
 import com.example.smartnutri.R;
 
 public class CadastroActivity extends AppCompatActivity {
 
+    private RadioGroup radioGroup;
     private RadioButton radioPaciente;
     private RadioButton radioNutricionista;
     private EditText etNome;
@@ -28,6 +35,7 @@ public class CadastroActivity extends AppCompatActivity {
     private EditText etSexo;
     private EditText etPeso;
     private EditText etAltura;
+    private EditText etInformacoesAdicionais;
     private EditText etCrm;
     private EditText etTelefone;
     private EditText etEmail;
@@ -35,8 +43,10 @@ public class CadastroActivity extends AppCompatActivity {
     private EditText etConfirmarSenha;
     private Button btnCadastrar;
 
-    private PessoaController pessoaController;
+//    private PessoaController pessoaController;
     private PessoaRepository pessoaRepository;
+    private PacienteRepository pacienteRepository;
+    private NutricionistaRepository nutricionistaRepository;
 
     private List<Pessoa> pessoaList;
 
@@ -44,10 +54,34 @@ public class CadastroActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
-        this.pessoaController = new PessoaController();
+        this.pessoaRepository = new PessoaRepository(this);
+        this.pacienteRepository = new PacienteRepository(this);
+        this.nutricionistaRepository = new NutricionistaRepository(this);
 
         initComponents();
         initActions();
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // Resetar a visibilidade de todos os campos
+                setCamposVisiveis(View.VISIBLE);
+                limparCampos();
+
+                // Verificar qual RadioButton está selecionado
+                if (checkedId == R.id.radioPaciente) {
+                    // Se Paciente está selecionado, esconder o campo CRM
+                    etCrm.setVisibility(View.GONE);
+                } else if (checkedId == R.id.radioNutricionista) {
+                    // Se Nutricionista está selecionado, esconder os campos Sexo, Peso, Altura, Informações Adicionais
+                    etSexo.setVisibility(View.GONE);
+                    etPeso.setVisibility(View.GONE);
+                    etAltura.setVisibility(View.GONE);
+                    etInformacoesAdicionais.setVisibility(View.GONE);
+                }
+
+                ajustarPosicaoCampos();
+            }
+        });
     }
 
     private void initActions() {
@@ -56,6 +90,14 @@ public class CadastroActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     String nome = etNome.getText().toString();
+                    String cpf = etCpf.getText().toString();
+                    String dataNascimento = etDataNascimento.getText().toString();
+                    String sexo = etSexo.getText().toString();
+                    String peso = etPeso.getText().toString();
+                    String altura = etAltura.getText().toString();
+                    String informacao = etInformacoesAdicionais.getText().toString();
+                    String crm = etCrm.getText().toString();
+                    String telefone = etTelefone.getText().toString();
                     String email = etEmail.getText().toString();
                     String senha = etSenha.getText().toString();
                     String confirmar = etConfirmarSenha.getText().toString();
@@ -75,13 +117,41 @@ public class CadastroActivity extends AppCompatActivity {
 
                     if (isValidInput(nome, email, senha)) {
                         // Crie um novo usuário e adicione-o à lista de usuários
-                        Pessoa newUser = new Pessoa(nome, email, senha);
-                        if (!pessoaRepository.insertPessoa(newUser);) {
-                            showMessage("E-mail já cadastrado.");
-                            return;
+
+                        if (radioGroup.getCheckedRadioButtonId() == R.id.radioPaciente) {
+                            // Se Paciente está selecionado, criar uma instância de Paciente
+                            Paciente paciente = new Paciente(nome, cpf, dataNascimento, telefone, email, senha,
+                                    Double.parseDouble(peso), Double.parseDouble(altura), sexo, informacao);
+
+                            if (pacienteRepository.getPacienteByEmail(paciente.getEmail()) != null) {
+                                showMessage("E-mail " + paciente.getEmail() + " já cadastrado.");
+                                return;
+                            }
+
+                            if (pacienteRepository.getPacienteByCpf(paciente.getCpf()) != null) {
+                                showMessage("CPF " + paciente.getCpf() + " já cadastrado.");
+                                return;
+                            }
+
+                            pacienteRepository.insertPaciente(paciente);
+                            showMessage("Cadastro do Paciente bem-sucedido.");;
+                        } else if (radioGroup.getCheckedRadioButtonId() == R.id.radioNutricionista) {
+                            Nutricionista nutricionista = new Nutricionista(nome, cpf, dataNascimento, telefone, email, senha, crm);
+
+                            if (nutricionistaRepository.getNutricionistaByEmail(nutricionista.getEmail()) != null) {
+                                showMessage("E-mail " + nutricionista.getEmail() + " já cadastrado.");
+                                return;
+                            }
+
+                            if (nutricionistaRepository.getNutricionistaByCpf(nutricionista.getCpf()) != null) {
+                                showMessage("CPF " + nutricionista.getCpf() + " já cadastrado.");
+                                return;
+                            }
+
+                            nutricionistaRepository.insertNutricionista(nutricionista);
+                            showMessage("Cadastro do Nutricionista bem-sucedido.");
                         }
 
-                        showMessage("Cadastro bem-sucedido.");
                         // Volte para a tela de login
                         finish();
                     } else {
@@ -149,6 +219,58 @@ public class CadastroActivity extends AppCompatActivity {
         return matcher.matches();
     }
 
+    // Método para ajustar a posição dos campos
+    private void ajustarPosicaoCampos() {
+        RelativeLayout.LayoutParams params;
+
+        // Se o campo CRM estiver visível, ajuste a posição dos campos seguintes
+        if (etCrm.getVisibility() == View.VISIBLE) {
+            params = (RelativeLayout.LayoutParams) etTelefone.getLayoutParams();
+            params.addRule(RelativeLayout.BELOW, R.id.etCrm);
+
+            params = (RelativeLayout.LayoutParams) etInformacoesAdicionais.getLayoutParams();
+            params.addRule(RelativeLayout.BELOW, R.id.etTelefone);
+        } else { // Se o campo CRM estiver invisível, ajuste a posição dos campos seguintes
+            params = (RelativeLayout.LayoutParams) etTelefone.getLayoutParams();
+            params.addRule(RelativeLayout.BELOW, R.id.etSexo);
+
+            params = (RelativeLayout.LayoutParams) etInformacoesAdicionais.getLayoutParams();
+            params.addRule(RelativeLayout.BELOW, R.id.etTelefone);
+        }
+    }
+
+    // Método para definir a visibilidade dos campos
+    private void setCamposVisiveis(int visibility) {
+        etNome.setVisibility(visibility);
+        etCpf.setVisibility(visibility);
+        etDataNascimento.setVisibility(visibility);
+        etSexo.setVisibility(visibility);
+        etPeso.setVisibility(visibility);
+        etAltura.setVisibility(visibility);
+        etCrm.setVisibility(visibility);
+        etTelefone.setVisibility(visibility);
+        etInformacoesAdicionais.setVisibility(visibility);
+        etEmail.setVisibility(visibility);
+        etSenha.setVisibility(visibility);
+        etConfirmarSenha.setVisibility(visibility);
+    }
+
+    // Método para limpar os campos
+    private void limparCampos() {
+        etNome.setText("");
+        etCpf.setText("");
+        etDataNascimento.setText("");
+        etSexo.setText("");
+        etPeso.setText("");
+        etAltura.setText("");
+        etCrm.setText("");
+        etTelefone.setText("");
+        etInformacoesAdicionais.setText("");
+        etEmail.setText("");
+        etSenha.setText("");
+        etConfirmarSenha.setText("");
+    }
+
     // Função para exibir uma mensagem
     public void showMessage(String msg) {
         Toast.makeText(CadastroActivity.this, msg, Toast.LENGTH_SHORT).show();
@@ -156,6 +278,8 @@ public class CadastroActivity extends AppCompatActivity {
 
     // Inicializa os componentes
     private void initComponents() {
+        //Radio
+        radioGroup = findViewById(R.id.radioGroup);
         radioPaciente = findViewById(R.id.radioPaciente);
         radioNutricionista = findViewById(R.id.radioNutricionista);
 
@@ -167,6 +291,7 @@ public class CadastroActivity extends AppCompatActivity {
         etSexo = findViewById(R.id.etSexo);
         etPeso = findViewById(R.id.etPeso);
         etAltura = findViewById(R.id.etAltura);
+        etInformacoesAdicionais = findViewById(R.id.etInformacoesAdicionais);
 
         //Nutricionista
         etCrm = findViewById(R.id.etCrm);
@@ -175,6 +300,8 @@ public class CadastroActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.etEmail);
         etSenha = findViewById(R.id.etSenha);
         etConfirmarSenha = findViewById(R.id.etConfirmarSenha);
+
+        //Button
         btnCadastrar = findViewById(R.id.btnCadastrar);
     }
 }
