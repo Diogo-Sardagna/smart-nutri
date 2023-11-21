@@ -8,18 +8,18 @@ import org.jetbrains.annotations.NotNull;
 @Entity(tableName = "pacientes")
 public class Paciente extends Pessoa {
     @NotNull
-    private double peso;
+    private Double peso;
     @NotNull
-    private double altura;
+    private Double altura;
     @NotNull
     private String sexo;
     @NotNull
     private String informacoes;
 
-    public Paciente() {}
+//    public Paciente() {}
 
     public Paciente(String nome, String cpf, String dataNascimento, String telefone, String email, String senha,
-                    double peso, double altura, String sexo, String informacoes) {
+                    Double peso, Double altura, String sexo, String informacoes) {
         super(nome, cpf, dataNascimento, telefone, email, senha);
         this.peso = peso;
         this.altura = altura;
@@ -28,20 +28,20 @@ public class Paciente extends Pessoa {
     }
 
     @NotNull
-    public double getPeso() {
+    public Double getPeso() {
         return peso;
     }
 
-    public void setPeso(@NotNull double peso) {
+    public void setPeso(@NotNull Double peso) {
         this.peso = peso;
     }
 
     @NotNull
-    public double getAltura() {
+    public Double getAltura() {
         return altura;
     }
 
-    public void setAltura(@NotNull double altura) {
+    public void setAltura(@NotNull Double altura) {
         this.altura = altura;
     }
 

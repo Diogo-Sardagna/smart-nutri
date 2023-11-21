@@ -9,11 +9,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import Repository.PessoaRepository;
+//import Repository.PessoaRepository;
+import Model.Nutricionista;
+import Model.Paciente;
 import Model.Pessoa;
+import Repository.NutricionistaRepository;
+import Repository.PacienteRepository;
+
 import com.example.smartnutri.R;
 
 public class LoginActivity extends AppCompatActivity {
@@ -30,20 +34,25 @@ public class LoginActivity extends AppCompatActivity {
 
     // Controller
 //    private UsuarioController usuarioController;
-    private PessoaRepository pessoaRepository;
+//    private PessoaRepository pessoaRepository;
 
-    private List<Pessoa> pessoaList;
+    private PacienteRepository pacienteRepository;
+    private NutricionistaRepository nutricionistaRepository;
+
+    private List<Paciente> pacientesList;
+    private List<Nutricionista> nutricionistasList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        this.pessoaRepository = new PessoaRepository(this);
+//        this.pessoaRepository = new PessoaRepository(this);
+        this.pacienteRepository = new PacienteRepository(this);
+        this.nutricionistaRepository = new NutricionistaRepository(this);
 
         initComponents();
         initActions();
     }
-
     private void initActions() {
         btnEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,11 +61,17 @@ public class LoginActivity extends AppCompatActivity {
                     String email = edtxEmail.getText().toString();
                     String senha = edtxSenha.getText().toString();
 
-                    if (login(email, senha)) {
+                    if (login(email, senha) == 1) {
                         // Autenticação bem-sucedida, vá para a próxima atividade
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, PacienteMenuActivity.class);
 
-                        showMessage("deu boa");
+                        showMessage("Paciente logado.");
+                        startActivity(intent);
+                    } else if (login(email, senha) == 2) {
+                        // Autenticação bem-sucedida, vá para a próxima atividade
+                        Intent intent = new Intent(LoginActivity.this, NutricionistaMenuActivity.class);
+
+                        showMessage("Nutricionista logado.");
                         startActivity(intent);
                     } else {
                         showMessage("Login falhou. Verifique suas credenciais.");
@@ -78,14 +93,22 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // Função para verificar as credenciais de login
-    private boolean login(String email, String senha) throws Exception {
-        pessoaList = pessoaRepository.getAllPessoas();
-        for (Pessoa user : pessoaList) {
+    private int login(String email, String senha) throws Exception {
+        pacientesList = pacienteRepository.getAllPacientes();
+        for (Paciente user : pacientesList) {
             if (user.getEmail().equals(email) && user.getSenha().equals(senha)) {
-                return true;
+                return 1;
             }
         }
-        return false;
+
+        nutricionistasList = nutricionistaRepository.getAllNutricionistas();
+        for (Nutricionista user : nutricionistasList) {
+            if (user.getEmail().equals(email) && user.getSenha().equals(senha)) {
+                return 2;
+            }
+        }
+
+        return 0;
     }
 
     // Função para exibir uma mensagem

@@ -10,7 +10,7 @@ public class Nutricionista extends Pessoa {
     @NotNull
     private String crm;
 
-    public Nutricionista() {}
+//    public Nutricionista() {}
 
     public Nutricionista(String nome, String cpf, String dataNascimento, String telefone, String email, String senha, String crm) {
         super(nome, cpf, dataNascimento, telefone, email, senha);
