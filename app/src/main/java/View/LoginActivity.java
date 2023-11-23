@@ -64,6 +64,8 @@ public class LoginActivity extends AppCompatActivity {
                     if (login(email, senha) == 1) {
                         // Autenticação bem-sucedida, vá para a próxima atividade
                         Intent intent = new Intent(LoginActivity.this, PacienteMenuActivity.class);
+                        Paciente paciente = pacienteRepository.getPacienteByEmail(email);
+                        intent.putExtra("PACIENTE", String.valueOf(paciente));
 
                         showMessage("Paciente logado.");
                         startActivity(intent);

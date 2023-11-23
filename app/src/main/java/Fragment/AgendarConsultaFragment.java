@@ -1,12 +1,9 @@
-package View;
+package Fragment;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
-
-import com.example.smartnutri.R;
-// --------------------------------------------
 import android.app.DatePickerDialog;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -14,18 +11,14 @@ import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.smartnutri.R;
+
 import java.util.Calendar;
 
 import Model.Agendamento;
 import Model.Nutricionista;
 
-public class PacienteMenuActivity extends AppCompatActivity {
-
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_paciente_menu);
-//    }
+public class AgendarConsultaFragment extends AppCompatActivity {
 
     private TextView dataSelecionadaTextView;
     private Button selecionarDataButton;
@@ -56,7 +49,7 @@ public class PacienteMenuActivity extends AppCompatActivity {
         nutricionistaSpinner.setAdapter(nutricionistaAdapter);
 
         calendar = Calendar.getInstance();
-        agendamento = new Agendamento((Nutricionista) nutricionistaSpinner.getSelectedItem(), calendar);
+//        agendamento = new Agendamento((Nutricionista) nutricionistaSpinner.getSelectedItem(), calendar);
 
         dataSelecionadaTextView.setText(agendamento.getDataFormatada());
 
@@ -67,7 +60,7 @@ public class PacienteMenuActivity extends AppCompatActivity {
                 calendar.set(Calendar.MONTH, month);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                agendamento = new Agendamento((Nutricionista) nutricionistaSpinner.getSelectedItem(), calendar);
+//                agendamento = new Agendamento((Nutricionista) nutricionistaSpinner.getSelectedItem(), calendar);
 
                 dataSelecionadaTextView.setText(agendamento.getDataFormatada());
             }
@@ -77,7 +70,7 @@ public class PacienteMenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 new DatePickerDialog(
-                        PacienteMenuActivity.this,
+                        AgendarConsultaFragment.this,
                         dateSetListener,
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),

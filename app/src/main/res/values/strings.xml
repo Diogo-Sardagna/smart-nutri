@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">SmartNutri</string>
+    <string name="open_nav">Open Navigation Drawer</string>
+    <string name="close_nav">Close Navitagion Drawer</string>
     <string name="title_activity_paciente_menu">PacienteMenuActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

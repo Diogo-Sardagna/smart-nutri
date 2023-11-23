@@ -138,7 +138,7 @@ public class CadastroActivity extends AppCompatActivity {
                             }
 
                             pacienteRepository.insertPaciente(paciente);
-                            showMessage("Cadastro do Paciente bem-sucedido.");;
+                            showMessage("Cadastro do Paciente bem-sucedido.");
                         } else if (radioGroup.getCheckedRadioButtonId() == R.id.radioNutricionista) {
                             Nutricionista nutricionista = new Nutricionista(nome, cpf, dataNascimento, telefone, email, senha, crm);
 
