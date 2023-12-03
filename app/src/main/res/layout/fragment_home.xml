@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="bottom"
     android:padding="16dp"
-    android:background="@drawable/img_background"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    <!--    android:background="@drawable/img_background"-->
 
 </LinearLayout>

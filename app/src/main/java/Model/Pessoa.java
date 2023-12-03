@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 @Entity(tableName = "pessoas")
 public abstract class Pessoa {
     @PrimaryKey(autoGenerate = true)
+    @NotNull
     public int id;
 
     @NotNull

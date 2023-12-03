@@ -13,6 +13,9 @@ public interface NutricionistaDao {
     @Insert
     void insert(Nutricionista nutricionista);
 
+    @Query("DELETE FROM nutricionistas")
+    void excluirTodosOsRegistros();
+
     @Query("SELECT * FROM nutricionistas")
     List<Nutricionista> getAllNutricionistas();
 

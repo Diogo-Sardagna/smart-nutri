@@ -1,7 +1,6 @@
 package Repository;
 
 import android.content.Context;
-import android.nfc.Tag;
 import android.util.Log;
 
 import androidx.room.Room;
@@ -35,7 +34,7 @@ public class PacienteRepository {
             return appDataBase.pacienteDao().getAllPacientes();
         } catch (Exception e) {
             Log.e("PacienteRepository", e.getMessage());
-            throw new Exception("Não foi possível obter todos os pacientes. Tente novamente.");
+            throw new Exception("Não foi possível obter todos os pacientes. Tente novamente.", e);
         }
     }
 
@@ -67,4 +66,3 @@ public class PacienteRepository {
     }
 
 }
-

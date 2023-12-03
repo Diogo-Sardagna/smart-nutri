@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 @Entity(tableName = "pacientes")
 public class Paciente extends Pessoa {
+//    @PrimaryKey(autoGenerate = true)
+//    public int idPaciente;
     @NotNull
     private Double peso;
     @NotNull
@@ -63,27 +65,18 @@ public class Paciente extends Pessoa {
         this.informacoes = informacoes;
     }
 
-    public Paciente convertStringToPaciente(String pacienteString) {
-        // Use o mesmo caractere de delimitação utilizado no método convertToString
-        char delimiter = '|';
-        String[] campos = pacienteString.split(String.valueOf(delimiter));
-
-//        return nome + delimiter + cpf + delimiter + dataNascimento + delimiter +
-//                telefone + delimiter + email + delimiter + senha + delimiter +
-//                peso + delimiter + altura + delimiter + sexo + delimiter + informacoes;
-
-        // Certifique-se de validar o tamanho do array para evitar IndexOutOfBoundsException
-        if (campos.length == 10) {
-            return new Paciente(
-                    campos[0], campos[1], campos[2], campos[3], campos[4],
-                    campos[5], Double.parseDouble(campos[6]), Double.parseDouble(campos[7]),
-                    campos[8], campos[9]
-            );
-        } else {
-            // Manipule o caso em que a string não possui o formato esperado
-            return null;
-        }
+    @Override
+    public String toString() {
+        return nome + "|"
+                + cpf + "|"
+                + dataNascimento + "|"
+                + telefone + "|"
+                + email + "|"
+                + senha + "|"
+                + peso + "|"
+                + altura + "|"
+                + sexo + "|"
+                + informacoes;
     }
-
 }
 

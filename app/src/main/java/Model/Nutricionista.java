@@ -7,6 +7,9 @@ import org.jetbrains.annotations.NotNull;
 
 @Entity(tableName = "nutricionistas")
 public class Nutricionista extends Pessoa {
+//    @PrimaryKey(autoGenerate = true)
+//    public int idNutricionista;
+
     @NotNull
     private String crm;
 
@@ -24,6 +27,17 @@ public class Nutricionista extends Pessoa {
 
     public void setCrm(@NotNull String crm) {
         this.crm = crm;
+    }
+
+    @Override
+    public String toString() {
+        return nome + "|"
+                + cpf + "|"
+                + dataNascimento + "|"
+                + telefone + "|"
+                + email + "|"
+                + senha + "|"
+                + crm;
     }
 }
 

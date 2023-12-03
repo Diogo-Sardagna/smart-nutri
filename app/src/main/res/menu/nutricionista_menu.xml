@@ -5,22 +5,18 @@
 
     <group
         android:checkableBehavior="single">
-
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/nav_home"
             android:title="Tela Inicial"/>
-
         <item
             android:id="@+id/nav_aprova_consulta"
             android:icon="@drawable/nav_aprova_consulta"
             android:title="Aprovar Consulta"/>
-
         <item
             android:id="@+id/nav_monta_plano_alimentar"
             android:icon="@drawable/nav_monta_plano_alimentar"
             android:title="Montar Plano Alimentar"/>
-
         <item
             android:id="@+id/nav_atualiza_cadastro"
             android:icon="@drawable/nav_atualiza_cadastro"
@@ -30,20 +26,16 @@
 
     <item
         android:title="">
-
         <menu>
-
             <item
                 android:id="@+id/nav_voltar"
                 android:icon="@drawable/nav_voltar"
                 android:title="Voltar"/>
-
             <item
                 android:id="@+id/nav_sair"
                 android:icon="@drawable/nav_sair"
                 android:title="Sair"/>
         </menu>
-
     </item>
 
 </menu>

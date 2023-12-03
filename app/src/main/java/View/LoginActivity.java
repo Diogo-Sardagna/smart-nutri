@@ -15,6 +15,7 @@ import java.util.List;
 import Model.Nutricionista;
 import Model.Paciente;
 import Model.Pessoa;
+import Model.UsuarioLogado;
 import Repository.NutricionistaRepository;
 import Repository.PacienteRepository;
 
@@ -22,23 +23,20 @@ import com.example.smartnutri.R;
 
 public class LoginActivity extends AppCompatActivity {
 
-    // Dados recuperados
-//    private String email;
-//    private String senha;
-
     // Componentes Visuais
     private EditText edtxEmail;
     private EditText edtxSenha;
     private Button btnEntrar;
     private Button btnCadastrar;
 
-    // Controller
-//    private UsuarioController usuarioController;
-//    private PessoaRepository pessoaRepository;
-
+    // Repositórios
     private PacienteRepository pacienteRepository;
     private NutricionistaRepository nutricionistaRepository;
 
+    // Modelos
+    private UsuarioLogado usuarioLogado;
+
+    // Listas
     private List<Paciente> pacientesList;
     private List<Nutricionista> nutricionistasList;
 
@@ -46,13 +44,14 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-//        this.pessoaRepository = new PessoaRepository(this);
         this.pacienteRepository = new PacienteRepository(this);
         this.nutricionistaRepository = new NutricionistaRepository(this);
+        this.usuarioLogado = new UsuarioLogado();
 
         initComponents();
         initActions();
     }
+
     private void initActions() {
         btnEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,13 +64,30 @@ public class LoginActivity extends AppCompatActivity {
                         // Autenticação bem-sucedida, vá para a próxima atividade
                         Intent intent = new Intent(LoginActivity.this, PacienteMenuActivity.class);
                         Paciente paciente = pacienteRepository.getPacienteByEmail(email);
-                        intent.putExtra("PACIENTE", String.valueOf(paciente));
+
+                        // Verifique se usuarioLogado não é nulo antes de chamar setPacienteLogado
+                        if (usuarioLogado != null) {
+                            usuarioLogado.setPacienteLogado(paciente);
+                        } else {
+                            // Trate o caso em que usuarioLogado é nulo
+                            showMessage("Erro: usuarioLogado é nulo.");
+                            return;  // ou tome outra ação apropriada
+                        }
 
                         showMessage("Paciente logado.");
                         startActivity(intent);
                     } else if (login(email, senha) == 2) {
                         // Autenticação bem-sucedida, vá para a próxima atividade
                         Intent intent = new Intent(LoginActivity.this, NutricionistaMenuActivity.class);
+                        Nutricionista nutricionista = nutricionistaRepository.getNutricionistaByEmail(email);
+
+                        if (usuarioLogado != null) {
+                            usuarioLogado.setNutricionistaLogado(nutricionista);
+                        } else {
+                            // Trate o caso em que usuarioLogado é nulo
+                            showMessage("Erro: usuarioLogado é nulo.");
+                            return;  // ou tome outra ação apropriada
+                        }
 
                         showMessage("Nutricionista logado.");
                         startActivity(intent);

@@ -3,7 +3,9 @@ package View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -16,7 +18,12 @@ import android.text.Spanned;
 import android.text.Editable;
 import android.text.TextWatcher;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,7 +37,7 @@ import Repository.NutricionistaRepository;
 import com.example.smartnutri.R;
 
 public class CadastroActivity extends AppCompatActivity {
-
+    // Componentes visuais
     private RadioGroup radioGroup;
     private RadioButton radioPaciente;
     private RadioButton radioNutricionista;
@@ -47,19 +54,20 @@ public class CadastroActivity extends AppCompatActivity {
     private EditText etSenha;
     private EditText etConfirmarSenha;
     private Button btnCadastrar;
+    private ArrayAdapter<Nutricionista> nutricionistaAdapter;
 
-//    private PessoaController pessoaController;
-//    private PessoaRepository pessoaRepository;
+    // Repositórios
     private PacienteRepository pacienteRepository;
     private NutricionistaRepository nutricionistaRepository;
 
+    // Listas
     private List<Pessoa> pessoaList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
-//        this.pessoaRepository = new PessoaRepository(this);
         this.pacienteRepository = new PacienteRepository(this);
         this.nutricionistaRepository = new NutricionistaRepository(this);
 
@@ -90,8 +98,8 @@ public class CadastroActivity extends AppCompatActivity {
         etAltura.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(1, 2)});
         etPeso.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(3, 2)});
 
-//        addUnidadeMedida(etAltura, "cm");
-//        addUnidadeMedida(etPeso, "kg");
+        this.nutricionistaAdapter = new ArrayAdapter<>(CadastroActivity.this, android.R.layout.simple_spinner_item);
+        nutricionistaAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     }
 
     private void initActions() {
@@ -111,6 +119,10 @@ public class CadastroActivity extends AppCompatActivity {
                     String email = etEmail.getText().toString();
                     String senha = etSenha.getText().toString();
                     String confirmar = etConfirmarSenha.getText().toString();
+
+                    if (!isValidDataNascimento(dataNascimento)) {
+                        return;
+                    }
 
                     if (!isValidEmail(email)) {
                         showMessage("Informe um e-mail válido.");
@@ -147,6 +159,12 @@ public class CadastroActivity extends AppCompatActivity {
                             }
 
                             nutricionistaRepository.insertNutricionista(nutricionista);
+
+                            // Adicione o novo Nutricionista ao ArrayAdapter
+                            nutricionistaAdapter.add(nutricionista);
+                            // Notifique o ArrayAdapter sobre a mudança nos dados
+                            nutricionistaAdapter.notifyDataSetChanged();
+
                             showMessage("Cadastro do Nutricionista bem-sucedido.");
                         }
 
@@ -157,9 +175,43 @@ public class CadastroActivity extends AppCompatActivity {
                     }
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
+                    Log.e("CadastroActivity", "Erro ao Realizar o cadastro.");
                 }
             }
         });
+    }
+
+    private boolean isValidDataNascimento(String dataNascimento) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        sdf.setLenient(false); // Define para que a análise seja rigorosa
+
+        try {
+            Date dataNasc = sdf.parse(dataNascimento);
+            Calendar calDataNascimento = Calendar.getInstance();
+            calDataNascimento.setTime(dataNasc);
+
+            // Calcula a data mínima permitida para ter no mínimo 18 anos
+            Calendar calMinimaIdade = Calendar.getInstance();
+            calMinimaIdade.add(Calendar.YEAR, -18);
+
+            // Calcula a data maxima permitida (200 anos atrás)
+            Calendar calMaxima200Anos = Calendar.getInstance();
+            calMaxima200Anos.add(Calendar.YEAR, -200);
+
+            // Verifica se a data está dentro dos limites especificados
+            if (calDataNascimento.before(calMinimaIdade) && calDataNascimento.after(calMaxima200Anos) && calDataNascimento.before(Calendar.getInstance())) {
+                // A data é válida
+                return true;
+            } else {
+                showMessage("Data inválida. Certifique-se de que a pessoa tenha no mínimo 18 anos e não ultrapasse 200 anos.");
+                return false;
+            }
+        } catch (ParseException e) {
+            // Erro ao analisar a data
+            showMessage("Formato de data inválido. Use o formato dd/MM/yyyy.");
+            etDataNascimento.setText(""); // Limpa o campo
+            return false;
+        }
     }
 
     // Por enquanto, para ser mais simples realizar o cadastro, apenas será necessário informar o nome, email e senha
@@ -217,26 +269,6 @@ public class CadastroActivity extends AppCompatActivity {
         return matcher.matches();
     }
 
-    // Método para ajustar a posição dos campos
-//    private void ajustarPosicaoCampos() {
-//        RelativeLayout.LayoutParams params;
-//
-//        // Se o campo CRM estiver visível, ajuste a posição dos campos seguintes
-//        if (etCrm.getVisibility() == View.VISIBLE) {
-//            params = (RelativeLayout.LayoutParams) etTelefone.getLayoutParams();
-//            params.addRule(RelativeLayout.BELOW, R.id.etCrm);
-//
-//            params = (RelativeLayout.LayoutParams) etInformacoesAdicionais.getLayoutParams();
-//            params.addRule(RelativeLayout.BELOW, R.id.etTelefone);
-//        } else { // Se o campo CRM estiver invisível, ajuste a posição dos campos seguintes
-//            params = (RelativeLayout.LayoutParams) etTelefone.getLayoutParams();
-//            params.addRule(RelativeLayout.BELOW, R.id.etSexo);
-//
-//            params = (RelativeLayout.LayoutParams) etInformacoesAdicionais.getLayoutParams();
-//            params.addRule(RelativeLayout.BELOW, R.id.etTelefone);
-//        }
-//    }
-
     // Valida E-mail ou Cpf Duplicados
     private boolean validaDuplicadoEmailOrCpf(String email, String cpf) throws Exception {
         if (pacienteRepository.getPacienteByEmail(email) != null) {
@@ -289,12 +321,6 @@ public class CadastroActivity extends AppCompatActivity {
                 return builder.subSequence(dstart, builder.length());
             }
 
-//            // Remove o ponto decimal se estiver sendo apagado
-//            if (dstart > 0 && text.charAt(dstart - 1) == '.' && text.indexOf('.') == dstart) {
-//                builder.deleteCharAt(dstart - 1);
-//                return builder.subSequence(dstart - 1, builder.length() - 1);
-//            }
-
             return null;
         }
 
@@ -309,57 +335,7 @@ public class CadastroActivity extends AppCompatActivity {
                 return true;
             }
         }
-//        private final Pattern pattern;
-//
-//        DecimalDigitsInputFilter(int digitsAfterZero) {
-//            pattern = Pattern.compile("[0-9]+((\\.[0-9]{0," + (digitsAfterZero - 1) + "})?)||(\\.)?");
-//        }
-//
-//        @Override
-//        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-//            Matcher matcher = pattern.matcher(dest);
-//            if (!matcher.matches())
-//                return "";
-//            return null;
-//        }
     }
-
-//    private void addUnidadeMedida(final EditText campo, final String und) {
-//        // Referencie o EditText no código
-////        final EditText etAltura = findViewById(R.id.etAltura);
-//
-//        // Adicione um TextWatcher para adicionar a unidade de medida
-//        campo.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                // Não é necessário implementar neste caso
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                // Não é necessário implementar neste caso
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//                campo.removeTextChangedListener(this);
-//
-//                String text = editable.toString();
-//
-//                if (text.isEmpty()) {
-//                    // Se o texto está vazio, não exibe a unidade de medida
-//                    campo.setText("");
-//                } else if (!text.endsWith(und)) {
-//                    // Adiciona a unidade de medida apenas se não estiver presente
-//                    text += (" " + und);
-//                    campo.setText(text);
-//                    campo.setSelection(text.length());
-//                }
-//
-//                campo.addTextChangedListener(this);
-//            }
-//        });
-//    }
 
     // Método para definir a visibilidade dos campos
     private void setCamposVisiveis(int visibility) {
@@ -405,9 +381,14 @@ public class CadastroActivity extends AppCompatActivity {
         radioPaciente = findViewById(R.id.radioPaciente);
         radioNutricionista = findViewById(R.id.radioNutricionista);
 
+        // Pessoa
         etNome = findViewById(R.id.etNome);
         etCpf = findViewById(R.id.etCpf);
         etDataNascimento = findViewById(R.id.etDataNascimento);
+        etTelefone = findViewById(R.id.etTelefone);
+        etEmail = findViewById(R.id.etEmail);
+        etSenha = findViewById(R.id.etSenha);
+        etConfirmarSenha = findViewById(R.id.etConfirmarSenha);
 
         //Paciente
         etSexo = findViewById(R.id.etSexo);
@@ -417,11 +398,6 @@ public class CadastroActivity extends AppCompatActivity {
 
         //Nutricionista
         etCrm = findViewById(R.id.etCrm);
-
-        etTelefone = findViewById(R.id.etTelefone);
-        etEmail = findViewById(R.id.etEmail);
-        etSenha = findViewById(R.id.etSenha);
-        etConfirmarSenha = findViewById(R.id.etConfirmarSenha);
 
         //Button
         btnCadastrar = findViewById(R.id.btnCadastrar);

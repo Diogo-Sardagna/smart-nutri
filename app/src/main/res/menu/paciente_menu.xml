@@ -1,9 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn = "navigation_view">
+
+    <group
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/nav_home"
+            android:title="Tela Inicial"/>
+        <item
+            android:id="@+id/nav_agendar_consulta"
+            android:icon="@drawable/nav_agendar_consulta"
+            android:title="Agendar Consulta"/>
+        <item
+            android:id="@+id/nav_visualizar_plano_alimentar"
+            android:icon="@drawable/nav_visualizar_plano_alimentar"
+            android:title="Vizualizar Plano Alimentar"/>
+        <item
+            android:id="@+id/nav_atualiza_cadastro"
+            android:icon="@drawable/nav_atualiza_cadastro"
+            android:title="Perfil"/>
+    </group>
+
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:title="">
+        <menu>
+            <item
+                android:id="@+id/nav_voltar"
+                android:icon="@drawable/nav_voltar"
+                android:title="Voltar"/>
+            <item
+                android:id="@+id/nav_sair"
+                android:icon="@drawable/nav_sair"
+                android:title="Sair"/>
+        </menu>
+    </item>
+
 </menu>

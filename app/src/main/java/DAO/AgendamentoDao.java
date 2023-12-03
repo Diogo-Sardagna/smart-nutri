@@ -16,11 +16,7 @@ public interface AgendamentoDao {
     @Insert
     void insert(Agendamento agendamento);
 
-//    @Delete
-//    @Query("DELETE FROM agendamento WHERE aprovado = 'true'")
-//    void deleteAgendamento();
-
-    @Query("SELECT * FROM nutricionistas")
+    @Query("SELECT * FROM agendamento")
     List<Agendamento> getAllAgendamentos();
 
     @Query("SELECT * FROM agendamento WHERE nutricionista = :nutricionista")
@@ -31,5 +27,4 @@ public interface AgendamentoDao {
 
     @Query("SELECT * FROM agendamento WHERE aprovado = :aprovado")
     List<Agendamento> getAgendamento(Boolean aprovado);
-
 }

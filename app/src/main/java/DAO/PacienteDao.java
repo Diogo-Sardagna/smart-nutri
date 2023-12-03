@@ -13,6 +13,9 @@ public interface PacienteDao {
     @Insert
     void insert(Paciente paciente);
 
+    @Query("DELETE FROM pacientes")
+    void excluirTodosOsRegistros();
+
     @Query("SELECT * FROM pacientes")
     List<Paciente> getAllPacientes();
 
