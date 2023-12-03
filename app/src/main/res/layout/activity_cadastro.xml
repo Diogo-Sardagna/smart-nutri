@@ -85,6 +85,7 @@
             android:layout_height="wrap_content"
             android:hint="Sexo"
             android:inputType="text"
+            android:maxLength="1"
             android:layout_below="@id/etDataNascimento"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="20dp"
@@ -115,12 +116,12 @@
             android:layout_height="wrap_content"
             android:hint="Altura"
             android:inputType="numberDecimal"
-            android:maxLength="3"
             android:layout_below="@id/etPeso"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="5dp" />
+    <!--            android:maxLength="3"-->
 <!--            app:mask="_,__ cm"-->
 <!--            app:maskCharacter="_"-->
 <!--            tools:ignore="MissingConstraints"-->

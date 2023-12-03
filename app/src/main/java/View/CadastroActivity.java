@@ -137,13 +137,48 @@ public class CadastroActivity extends AppCompatActivity {
                         return;
                     }
 
-                    if (isValidInput(nome, email, senha)) {
+                    if (isValidInput(nome, cpf, dataNascimento, telefone, email, senha)) {
                         // Crie um novo usuário e adicione-o à lista de usuários
 
                         if (radioGroup.getCheckedRadioButtonId() == R.id.radioPaciente) {
                             // Se Paciente está selecionado, criar uma instância de Paciente
                             Paciente paciente = new Paciente(nome, cpf, dataNascimento, telefone, email, senha,
                                     Double.parseDouble(peso), Double.parseDouble(altura), sexo, informacao);
+
+                            if (!isCampoEmBranco(sexo)) {
+                                showMessage("Campo sexo em branco.");
+                                return;
+                            }
+
+                            if (!isValidSexo(paciente.getSexo())) {
+                                showMessage("Sexo inválido. Insira 'M' para masculino ou 'F' para feminino.");
+                                return;
+                            }
+
+                            if (!isCampoEmBranco(peso)) {
+                                showMessage("Campo peso em branco.");
+                                return;
+                            }
+
+                            if (!isValidPeso(paciente.getPeso())) {
+                                showMessage("Peso inválido. Insira um valor numérico válido.");
+                                return;
+                            }
+
+                            if (!isCampoEmBranco(altura)) {
+                                showMessage("Campo altura em branco.");
+                                return;
+                            }
+
+                            if (!isValidAltura(paciente.getAltura())) {
+                                showMessage("Altura inválida. Insira um valor numérico válido.");
+                                return;
+                            }
+
+                            if (!isCampoEmBranco(paciente.getInformacoes())) {
+                                showMessage("Informações adicionais em branco.");
+                                return;
+                            }
 
                             if (!validaDuplicadoEmailOrCpf(paciente.getEmail(), paciente.getCpf())) {
                                 return;
@@ -153,6 +188,11 @@ public class CadastroActivity extends AppCompatActivity {
                             showMessage("Cadastro do Paciente bem-sucedido.");
                         } else if (radioGroup.getCheckedRadioButtonId() == R.id.radioNutricionista) {
                             Nutricionista nutricionista = new Nutricionista(nome, cpf, dataNascimento, telefone, email, senha, crm);
+
+                            if (!isCampoEmBranco(nutricionista.getCrm())) {
+                                showMessage("CRM em branco.");
+                                return;
+                            }
 
                             if (!validaDuplicadoEmailOrCpf(nutricionista.getEmail(), nutricionista.getCpf())) {
                                 return;
@@ -214,9 +254,48 @@ public class CadastroActivity extends AppCompatActivity {
         }
     }
 
-    // Por enquanto, para ser mais simples realizar o cadastro, apenas será necessário informar o nome, email e senha
-    private boolean isValidInput(String nome, String email, String senha) {
-        return !nome.trim().isEmpty() && !email.trim().isEmpty() && !senha.trim().isEmpty();
+    // Método para validar o sexo
+    private boolean isValidSexo(String sexo) {
+        if (sexo.equalsIgnoreCase("M")) {
+            return true;
+        } else if (sexo.equalsIgnoreCase("F")) {
+            return  true;
+        }
+
+        return false;
+    }
+
+    // Método para validar o peso
+    private boolean isValidPeso(Double pesoValue) {
+        try {
+            return pesoValue >= 50.00 && pesoValue <= 500.00;
+        } catch (NumberFormatException e) {
+            showMessage("Peso inválido. Insira um valor numérico válido.");
+            return false;
+        }
+    }
+
+    // Método para validar a altura
+    private boolean isValidAltura(Double alturaValue) {
+        try {
+            return alturaValue >= 1.00 && alturaValue <= 5.00;
+        } catch (NumberFormatException e) {
+            showMessage("Altura inválida. Insira um valor numérico válido.");
+            return false;
+        }
+    }
+
+    private boolean isCampoEmBranco(String campo) {
+        return !campo.trim().isEmpty();
+    }
+
+    private boolean isValidInput(String nome, String cpf, String dataNascimento, String telefone, String email, String senha) {
+        return !nome.trim().isEmpty() &&
+                !cpf.trim().isEmpty() &&
+                !dataNascimento.trim().isEmpty() &&
+                !telefone.trim().isEmpty() &&
+                !email.trim().isEmpty() &&
+                !senha.trim().isEmpty();
     }
 
     // Valida a confirmação da senha
