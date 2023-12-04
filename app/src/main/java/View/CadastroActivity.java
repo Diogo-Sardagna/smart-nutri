@@ -120,7 +120,17 @@ public class CadastroActivity extends AppCompatActivity {
                     String senha = etSenha.getText().toString();
                     String confirmar = etConfirmarSenha.getText().toString();
 
+                    if (!isValidCPF(cpf)) {
+                        showMessage("CPF incorreto!");
+                        return;
+                    }
+
                     if (!isValidDataNascimento(dataNascimento)) {
+                        return;
+                    }
+
+                    if (!isValidTelefone(telefone)) {
+                        showMessage("Telefone incorreto! " + telefone);
                         return;
                     }
 
@@ -194,6 +204,11 @@ public class CadastroActivity extends AppCompatActivity {
                                 return;
                             }
 
+                            if (!isValidCrm(nutricionista.getCrm())) {
+                                showMessage("CRM incorreto. O primeiro dígito deve ser do 1 ao 5.");
+                                return;
+                            }
+
                             if (!validaDuplicadoEmailOrCpf(nutricionista.getEmail(), nutricionista.getCpf())) {
                                 return;
                             }
@@ -221,7 +236,7 @@ public class CadastroActivity extends AppCompatActivity {
         });
     }
 
-    private boolean isValidDataNascimento(String dataNascimento) {
+    public boolean isValidDataNascimento(String dataNascimento) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         sdf.setLenient(false); // Define para que a análise seja rigorosa
 
@@ -254,6 +269,40 @@ public class CadastroActivity extends AppCompatActivity {
         }
     }
 
+    // Método para validar o CRM do nutricionista
+    public boolean isValidCrm(String crm) {
+        // Verifique se o CRM possui o formato exato "CRM-1/12345"
+        String crmPattern = "^CRM-[1-5]/[0-9]{5}$";
+        return crm.matches(crmPattern);
+    }
+
+//    public boolean isValidCPF(String cpf) {
+//        // Remove caracteres não numéricos
+//        String cpfNumerico = cpf.replaceAll("[^0-9]", "");
+//
+//        if (!(cpfNumerico.length() == 11)) {
+//            return false;
+//        }
+//
+//        // Verifica se o CPF tem 11 dígitos e se todos são iguais
+//        return cpfNumerico.length() == 11 && !cpfNumerico.matches("(\\d)\\1{10}");
+//    }
+
+    public boolean isValidCPF(String cpf) {
+        // Remove caracteres não numéricos do CPF
+        String cpfNumerico = cpf.replaceAll("[^0-9]", "");
+
+        // Verifica se o CPF tem o formato desejado (exemplo: "123.456.789-09")
+        String cpfPattern = "^[0-9]{3}\\.[0-9]{3}\\.[0-9]{3}-[0-9]{2}$";
+        return cpfNumerico.matches(cpfPattern);
+    }
+
+    public boolean isValidTelefone(String telefone) {
+        // Verifica se o telefone tem o formato desejado (exemplo: "+55 (47) 99103-2009")
+        String telefonePattern = "^\\+55 \\(\\d{2}\\) \\d{5}-\\d{4}$";
+        return telefone.matches(telefonePattern);
+    }
+
     // Método para validar o sexo
     private boolean isValidSexo(String sexo) {
         if (sexo.equalsIgnoreCase("M")) {
@@ -266,7 +315,7 @@ public class CadastroActivity extends AppCompatActivity {
     }
 
     // Método para validar o peso
-    private boolean isValidPeso(Double pesoValue) {
+    public boolean isValidPeso(Double pesoValue) {
         try {
             return pesoValue >= 50.00 && pesoValue <= 500.00;
         } catch (NumberFormatException e) {
@@ -276,7 +325,7 @@ public class CadastroActivity extends AppCompatActivity {
     }
 
     // Método para validar a altura
-    private boolean isValidAltura(Double alturaValue) {
+    public boolean isValidAltura(Double alturaValue) {
         try {
             return alturaValue >= 1.00 && alturaValue <= 5.00;
         } catch (NumberFormatException e) {
@@ -285,7 +334,7 @@ public class CadastroActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isCampoEmBranco(String campo) {
+    public boolean isCampoEmBranco(String campo) {
         return !campo.trim().isEmpty();
     }
 
@@ -299,7 +348,7 @@ public class CadastroActivity extends AppCompatActivity {
     }
 
     // Valida a confirmação da senha
-    private boolean passwordConfirm(String senha, String confirma) {
+    public boolean passwordConfirm(String senha, String confirma) {
         if (confirma.trim().isEmpty()) {
             showMessage("Confirme sua senha.");
             return false;
@@ -314,7 +363,7 @@ public class CadastroActivity extends AppCompatActivity {
     }
 
     // Verifica se a senha tem pelo menos 8 caracteres, uma letra maiúscula e um caractere especial
-    private boolean isValidPassword(String password) {
+    public boolean isValidPassword(String password) {
         if (password.length() < 8) {
             showMessage("A senha deve conter no mínimo 8 caracteres.");
             return false;
@@ -334,7 +383,7 @@ public class CadastroActivity extends AppCompatActivity {
     }
 
     // Valida E-mail
-    private boolean isValidEmail(String email) {
+    public boolean isValidEmail(String email) {
         // Use uma expressão regular para validar o formato do e-mail
         String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
