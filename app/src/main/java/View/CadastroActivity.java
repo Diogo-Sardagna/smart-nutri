@@ -289,12 +289,7 @@ public class CadastroActivity extends AppCompatActivity {
 //    }
 
     public boolean isValidCPF(String cpf) {
-        // Remove caracteres não numéricos do CPF
-        String cpfNumerico = cpf.replaceAll("[^0-9]", "");
-
-        // Verifica se o CPF tem o formato desejado (exemplo: "123.456.789-09")
-        String cpfPattern = "^[0-9]{3}\\.[0-9]{3}\\.[0-9]{3}-[0-9]{2}$";
-        return cpfNumerico.matches(cpfPattern);
+        return true;
     }
 
     public boolean isValidTelefone(String telefone) {

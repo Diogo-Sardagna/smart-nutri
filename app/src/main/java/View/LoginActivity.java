@@ -24,14 +24,14 @@ import com.example.smartnutri.R;
 public class LoginActivity extends AppCompatActivity {
 
     // Componentes Visuais
-    private EditText edtxEmail;
-    private EditText edtxSenha;
+    public EditText edtxEmail;
+    public EditText edtxSenha;
     private Button btnEntrar;
     private Button btnCadastrar;
 
     // Repositórios
-    private PacienteRepository pacienteRepository;
-    private NutricionistaRepository nutricionistaRepository;
+    public PacienteRepository pacienteRepository;
+    public NutricionistaRepository nutricionistaRepository;
 
     // Modelos
     private UsuarioLogado usuarioLogado;
@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         initActions();
     }
 
-    private void initActions() {
+    public void initActions() {
         btnEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     // Função para verificar as credenciais de login
-    private int login(String email, String senha) throws Exception {
+    public int login(String email, String senha) throws Exception {
         pacientesList = pacienteRepository.getAllPacientes();
         for (Paciente user : pacientesList) {
             if (user.getEmail().equals(email) && user.getSenha().equals(senha)) {

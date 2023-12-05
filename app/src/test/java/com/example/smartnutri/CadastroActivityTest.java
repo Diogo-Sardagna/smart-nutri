@@ -10,8 +10,8 @@ import View.CadastroActivity;
 
 public class CadastroActivityTest {
 
-    /****************************************** Diogo *********************************************/
     /********************************** Teste Data de Nascimento **********************************/
+    /****************************************** Diogo *********************************************/
     @Test
     public void testCadastroWithValidDataNascimento() {
         CadastroActivity cadastroActivityMock = mock(CadastroActivity.class);
