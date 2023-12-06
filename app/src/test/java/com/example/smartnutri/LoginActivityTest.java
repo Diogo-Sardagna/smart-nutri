@@ -64,18 +64,18 @@ public class LoginActivityTest {
         loginActivity.nutricionistaRepository = nutricionistaRepositoryMock;
 
         // Configurar um paciente válido
-        Paciente pacienteValido = new Paciente();
+        Paciente pacienteValido = p1;
         pacienteValido.setEmail("p1@gmail.com");
         pacienteValido.setSenha("p1@12345");
 
         when(pacienteRepositoryMock.getPacienteByEmail(anyString())).thenReturn(pacienteValido);
 
         // Configurar a interface do usuário
-        loginActivity.edtxEmail.setText("email@paciente.com");
-        loginActivity.edtxSenha.setText("senha");
+        loginActivity.edtxEmail.setText(pacienteValido.getEmail());
+        loginActivity.edtxSenha.setText(pacienteValido.getSenha());
 
         // Executar o método de login
-        int result = loginActivity.login("email@paciente.com", "senha");
+        int result = loginActivity.login(pacienteValido.getEmail(),pacienteValido.getSenha());
 
         // Verificar se o login foi bem-sucedido
         assertEquals(1, result);
@@ -84,7 +84,7 @@ public class LoginActivityTest {
     @Test
     public void testLoginWithEmptyPassword() throws Exception {
         // Configurar a interface do usuário com senha em branco
-        loginActivity.edtxEmail.setText("email@paciente.com");
+        loginActivity.edtxEmail.setText("p2@gmail.com");
         loginActivity.edtxSenha.setText("");
 
         // Executar o método de login
